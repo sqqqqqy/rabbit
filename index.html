@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rabbid 投票页面</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #ffb6d5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .image-container {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .rabbid-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .rabbid-image:hover {
+            transform: scale(1.05);
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            min-width: 120px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .love-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .hate-btn {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+        }
+
+        .love-btn:hover {
+            background: linear-gradient(45deg, #ff5252, #ff7676);
+        }
+
+        .hate-btn:hover {
+            background: linear-gradient(45deg, #26a69a, #00897b);
+        }
+
+        .love-btn.growing {
+            animation: grow 0.5s ease-out;
+        }
+
+        @keyframes grow {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .title {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .counter {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .love-btn.fullscreen {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(20);
+            z-index: 1000;
+            background: linear-gradient(45deg, #ff0000, #ff4444);
+            animation: fullscreenGrow 1s ease-out;
+        }
+
+        @keyframes fullscreenGrow {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(20);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .buttons-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-title" style="font-size: 2.2rem; font-weight: bold; color: #fff; text-shadow: 2px 2px 8px #e75480, 0 0 10px #fff; margin-bottom: 30px; letter-spacing: 2px;">你喜欢兔子吗？</div>
+    <div class="container">
+        
+        <div class="image-container">
+            <img src="rabbit.jpeg" 
+                 alt="Rabbid" 
+                 class="rabbid-image"
+                 id="rabbidImage">
+        </div>
+        
+        <div class="buttons-container">
+            <button class="btn love-btn" id="loveBtn">❤️ LOVE</button>
+            <button class="btn hate-btn" id="hateBtn">💔 HATE</button>
+        </div>
+        
+    </div>
+
+    <script>
+        const loveBtn = document.getElementById('loveBtn');
+        const hateBtn = document.getElementById('hateBtn');
+        let currentScale = 1;
+
+        hateBtn.addEventListener('click', function() {
+            // 每次按下hate，love按钮永久变大
+            currentScale += 0.2;
+            loveBtn.style.transform = `scale(${currentScale})`;
+        });
+
+        loveBtn.addEventListener('click', function() {
+            // 点击love按钮后，显示图片和上方大号黑色文字，页面四周充满爱心
+            document.body.innerHTML = `
+                <div style="width:100vw;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#ffb6d5;position:relative;overflow:hidden;">
+                    <div style="font-size:8vw;font-weight:bold;color:#111;text-align:center;margin-bottom:3vh;line-height:1.1;z-index:2;">兔子爆爱你！！！</div>
+                    <img src="images.jpeg" alt="Rabbit" style="display:block;max-width:90vw;max-height:60vh;margin:auto;z-index:2;">
+                    <div id="hearts-container" style="position:absolute;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:1;"></div>
+                </div>`;
+            // 动态生成爱心
+            const heartsContainer = document.getElementById('hearts-container');
+            for(let i=0;i<120;i++){
+                const heart = document.createElement('div');
+                const size = Math.random()*32+24;
+                heart.innerHTML = '❤️';
+                heart.style.position = 'absolute';
+                heart.style.left = Math.random()*100+'vw';
+                heart.style.top = Math.random()*100+'vh';
+                heart.style.fontSize = size+'px';
+                heart.style.opacity = Math.random()*0.5+0.5;
+                heart.style.transform = `rotate(${Math.random()*360}deg)`;
+                heartsContainer.appendChild(heart);
+            }
+        });
+    </script>
+</body>
+</html> 

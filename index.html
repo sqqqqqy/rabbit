@@ -186,8 +186,8 @@
         let currentScale = 1;
 
         hateBtn.addEventListener('click', function() {
-            // 每次按下hate，love按钮永久变大
-            currentScale += 0.2;
+            // 每次按下hate，love按钮永久变小，最小为1
+            currentScale = Math.max(1, currentScale - 0.2);
             loveBtn.style.transform = `scale(${currentScale})`;
         });
 
